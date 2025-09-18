@@ -105,8 +105,7 @@ userClient.once('ready', async () => {
             fetchMore = batchArr.length === 100;
         }
 
-        // Get today's date string in local time (YYYY-MM-DD)
-const todayStr = new Date().toLocaleDateString('en-CA'); // 'YYYY-MM-DD' format
+        const todayStr = '2025-09-15'
         // Print all matching messages (oldest to newest), group by profile, and sum quantity per profile
         let profileTotals = {};
         let profileHits = {};
@@ -116,6 +115,7 @@ const todayStr = new Date().toLocaleDateString('en-CA'); // 'YYYY-MM-DD' format
         allMessages.reverse().forEach(msg => {
             // Only process messages from today
             const msgDateStr = msg.createdAt.toISOString().slice(0, 10);
+            console.log(msgDateStr)
             if (msgDateStr !== todayStr) return;
                 if (messageMatches(msg)) {
                     // Sum quantity per profile+item and count hits

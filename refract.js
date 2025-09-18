@@ -30,13 +30,6 @@ userClient.once('ready', async () => {
             const header = `${prefix}[${time}] ${msg.author.tag}:`;
             console.log(header);
 
-            // Print text content if present
-            if (msg.content && msg.content.trim()) {
-                console.log(`${header} ${msg.content}`);
-            } else {
-                console.log(header);
-            }
-
             // Print embeds
             if (msg.embeds && msg.embeds.length > 0) {
                 msg.embeds.forEach((embed, i) => {
@@ -108,7 +101,7 @@ userClient.once('ready', async () => {
         }
 
         // Get today's date string in local time (YYYY-MM-DD)
-const todayStr = new Date().toLocaleDateString('en-CA');
+const todayStr = '2025-09-15';
         // Print all matching messages (oldest to newest), group by profile, and sum quantity per profile
         let profileTotals = {};
         let profileProductTotals = {};
