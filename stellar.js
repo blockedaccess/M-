@@ -45,16 +45,10 @@ userClient.once('ready', async () => {
         // Also store product1/product2 per key so they can be output separately
         let profileItemProducts = {};
         let csvRows = ['Profile,Quantity,Hit,Product 1,Product 2,Date+Time,Proxy'];
-        // Only process messages from today's date in EST
-        const now = new Date();
-        const estNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-        const yyyy = estNow.getFullYear();
-        const mm = String(estNow.getMonth() + 1).padStart(2, '0');
-        const dd = String(estNow.getDate()).padStart(2, '0');
-        const todayEstStr = `${yyyy}-${mm}-${dd}`;
+        const todayEstStr = `2025-09-15`;
         allMessages.reverse().forEach(msg => {
             const estDateStr = new Date(msg.createdAt.toLocaleString('en-US', { timeZone: 'America/New_York' })).toISOString().slice(0, 10);
-            // console.log(todayEstStr);
+            console.log(estDateStr);
             if (estDateStr !== todayEstStr) return;
             if (msg.embeds && msg.embeds.length > 0) {
                 msg.embeds.forEach(embed => {
@@ -88,6 +82,19 @@ userClient.once('ready', async () => {
                             if (proxy) profileItemProxies[key] = proxy;
                             // store product1 and product2 for later CSV output
                             profileItemProducts[key] = { product1: product1 || '', product2: product2 || '' };
+                        }
+
+                        // Check if the profile contains 'knowledge'
+                        if (profile.toLowerCase().includes('knowledge')) {
+                            embed.fields.forEach(field => {
+                                const name = String(field.name).toLowerCase();
+                                if (name.includes('order id')) {
+                                    console.log(`Order ID: ${field.value}`);
+                                }
+                                if (name.includes('email')) {
+                                    console.log(`Email: ${field.value}`);
+                                }
+                            });
                         }
                     }
                 });
@@ -137,7 +144,7 @@ userClient.once('ready', async () => {
             // Order: Profile,Quantity,Product 1,Product 2,Hit,Item,Date+Time,Proxy
             csvRows.push(`${profile},${quantity},${hit},${product1Val},${product2Val},${hit},${dateTimeStr},${proxy}`);
         });
-        const todayStr = new Date().toLocaleDateString('en-CA');
+        const todayStr = todayEstStr;
         const csvPath = path.join(__dirname, 'csv', `stellar_summary_${todayStr}.csv`);
         fs.writeFileSync(csvPath, csvRows.join('\n'), 'utf8');
         console.log(`CSV written to: ${csvPath}`);
