@@ -105,7 +105,7 @@ userClient.once('ready', async () => {
             fetchMore = batchArr.length === 100;
         }
 
-        const todayStr = '2025-09-15'
+        const todayStr = '2025-10-31'
         // Print all matching messages (oldest to newest), group by profile, and sum quantity per profile
         let profileTotals = {};
         let profileHits = {};
@@ -115,7 +115,7 @@ userClient.once('ready', async () => {
         allMessages.reverse().forEach(msg => {
             // Only process messages from today
             const msgDateStr = msg.createdAt.toISOString().slice(0, 10);
-            console.log(msgDateStr)
+            // console.log(msgDateStr)
             if (msgDateStr !== todayStr) return;
                 if (messageMatches(msg)) {
                     // Sum quantity per profile+item and count hits
@@ -160,7 +160,7 @@ userClient.once('ready', async () => {
                     }
             }
         });
-        console.log('\nTotal Quantities by Profile:');
+        // console.log('\nTotal Quantities by Profile:');
         const csvRows = [];
             csvRows.push('Profile,Quantity,Hit,Site,Item,Date,Status,TXN');
             Object.entries(profileTotals).forEach(([key, total]) => {
@@ -172,7 +172,7 @@ userClient.once('ready', async () => {
                     const site = (profileSite[key] || '').replace(/,/g, '');
                     const dateStr = profileDate[key] ? profileDate[key].toLocaleString().replace(/,/g, '') : '';
                     // Print to console
-                    console.log(` ${profile} |  Quantity : ${total} | Hit : ${hits} | Site : ${site} | Item : ${item} | Date: ${dateStr}`);
+                    // console.log(` ${profile} |  Quantity : ${total} | Hit : ${hits} | Site : ${site} | Item : ${item} | Date: ${dateStr}`);
                     // Add to CSV with labels, sanitized
                     csvRows.push(`${profile}, ${total}, ${hits},${site},${item},${dateStr}`);
                 }
