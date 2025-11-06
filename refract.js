@@ -2,8 +2,6 @@ require('dotenv').config();
 const { Client: UserClient } = require('discord.js-selfbot-v13');
 const fs = require('fs');
 const path = require('path');
-
-// Channel ID the user wants to read
 const CHANNEL_ID = process.env.REFRACT_CHANNEL_ID;
 
 const userClient = new UserClient({
