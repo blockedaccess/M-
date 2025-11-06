@@ -4,10 +4,17 @@ const fs = require('fs');
 const path = require('path');
 const CHANNEL_ID = process.env.SHIKARI_CHANNEL_ID;
 
+if (!process.env.DISCORD_TOKEN) {
+	console.error('Please set DISCORD_TOKEN in your .env file');
+	process.exit(1);
+}
+
 const userClient = new UserClient({
 	checkUpdate: false,
 	ws: { properties: { browser: 'Discord iOS' } }
 });
+
+userClient.on('error', err => console.error('Client error:', err));
 
 userClient.once('ready', async () => {
 	console.log(`Logged in as user: ${userClient.user.tag}`);
@@ -130,13 +137,6 @@ userClient.once('ready', async () => {
 		process.exit(1);
 	}
 });
-
-userClient.on('error', err => console.error('Client error:', err));
-
-if (!process.env.DISCORD_TOKEN) {
-	console.error('Please set DISCORD_TOKEN in your .env file');
-	process.exit(1);
-}
 
 userClient.login(process.env.DISCORD_TOKEN).catch(err => {
 	console.error('Login failed:', err);
