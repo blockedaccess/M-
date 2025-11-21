@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { Client: UserClient } = require('discord.js-selfbot-v13');
 const fs = require('fs');
+const { DateTime } = require('luxon');
 const path = require('path');
 const CHANNEL_ID = process.env.STELLAR_CHANNEL_ID;
 
@@ -49,7 +50,9 @@ userClient.once('ready', async () => {
 		let csvRows = ['Profile,Quantity,Hit,Product 1,Product 2,Date+Time,Proxy'];
 		const todayEstStr = process.env.TODAY;
 		allMessages.reverse().forEach(msg => {
-			const estDateStr = msg.createdAt.toISOString().slice(0, 10);
+			const estDateStr = DateTime.fromJSDate(msg.createdAt)
+				.setZone('America/New_York')
+				.toISODate(); 
 			if (estDateStr !== todayEstStr) return;
 			if (msg.embeds && msg.embeds.length > 0) {
 				msg.embeds.forEach(embed => {
