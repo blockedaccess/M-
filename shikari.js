@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { Client: UserClient } = require('discord.js-selfbot-v13');
+const { DateTime } = require('luxon');
 const fs = require('fs');
 const path = require('path');
 const CHANNEL_ID = process.env.SHIKARI_CHANNEL_ID;
@@ -70,9 +71,13 @@ userClient.once('ready', async () => {
 		let profileSite = {};
 		let profileDesc = {};
 		let profileDate = {};
+		const csvRows = [];
+		csvRows.push('Profile,Quantity,Hit,Site,Item,Date,Status,TXN');
 		allMessages.reverse().forEach(msg => {
-			const msgDateStr = msg.createdAt.toISOString().slice(0, 10);
-			if (msgDateStr !== todayStr) return;
+			const estDateStr = DateTime.fromJSDate(msg.createdAt)
+				.setZone('America/New_York')
+				.toISODate(); 
+			if (estDateStr !== todayStr) return;
 			if (messageMatches(msg)) {
 				if (msg.embeds && msg.embeds.length > 0) {
 					msg.embeds.forEach(embed => {
@@ -114,8 +119,6 @@ userClient.once('ready', async () => {
 				}
 			}
 		});
-		const csvRows = [];
-		csvRows.push('Profile,Quantity,Hit,Site,Item,Date,Status,TXN');
 		Object.entries(profileTotals).forEach(([key, total]) => {
 			if (total > 0) {
 				let [profile, item] = key.split('|||');
